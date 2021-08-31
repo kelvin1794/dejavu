@@ -9,7 +9,7 @@ Dejavu is a stack meant for [PyFlink](https://flink.apache.org/) quickstarts. It
 - **app**: PyFlink examples with some sample data
 - `VERSION` file: This file will be read throughout the automation scripts to determine which version of PyFlink we want to use (at the point of writing, we're using the latest 1.13.2)
 - `docker-compose.yml`: Docker-compose file to bring up the development stack
-- `Makefile`: A
+- `Makefile`: Created out of the intention to run local tests. It doesn't play any role for now, except that you can run `make install` to create a virtual env so your IDE doesn't complain about missing packages 😛
 
 ## Installation
 
@@ -31,7 +31,7 @@ To start local development stack:
 
 There are a few examples provided.
 
-1. Example [`bank_stream_table_api.py`](./app/bank_stream_table_api.py)
+1. Example [`bank_stream_table_api.py`](./app/bank_stream_table_api.py). To run the example:
 
 ```bash
 docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_table_api.py

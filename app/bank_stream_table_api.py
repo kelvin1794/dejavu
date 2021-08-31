@@ -67,10 +67,10 @@ ds = t_env.to_append_stream(
     result,
     Types.ROW(
         [
-            Types.STRING(),  # account_no
             Types.SQL_TIMESTAMP(),  # window_start
             Types.SQL_TIMESTAMP(),  # window_end
             Types.SQL_TIMESTAMP(),  # window_time
+            Types.STRING(),  # account_no
             Types.DOUBLE(),  # total
         ]
     ),

@@ -50,6 +50,8 @@ services:
   data_generator:
     image: data_generator:latest
     container_name: data_generator
+    command:
+      ["bash", "./wait_for_kafka.sh", "python", "transaction_generator.py"]
     depends_on:
       - kafka
       - jobmanager

@@ -33,76 +33,76 @@ There are a few examples provided.
 
 1. Example [`bank_stream_table_api.py`](./app/bank_stream_table_api.py). To run the example:
 
-```bash
-docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_table_api.py
-```
+   ```bash
+   docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_table_api.py
+   ```
 
-Check the result in the output path and it should look something like below:
+   Check the result in the output path and it should look something like below:
 
-```bash
-$ docker-compose exec taskmanager find /tmp/output
-/tmp/output
-/tmp/output/2021-08-31--04
-/tmp/output/2021-08-31--04/.part-0-0.inprogress.47949645-ba93-40c7-a18e-d88ba1845cf2
+   ```bash
+   $ docker-compose exec taskmanager find /tmp/output
+   /tmp/output
+   /tmp/output/2021-08-31--04
+   /tmp/output/2021-08-31--04/.part-0-0.inprogress.47949645-ba93-40c7-a18e-d88ba1845cf2
 
-$ docker-compose exec taskmanager cat /tmp/output/2021-08-31--04/.part-0-0.inprogress.47949645-ba93-40c7-a18e-d88ba1845cf2
-+I[2017-12-20 00:00:00.0, 2018-01-19 00:00:00.0, 2018-01-18 23:59:59.999, 409000611074, 1.3515737E7]
-+I[2018-01-19 00:00:00.0, 2018-02-18 00:00:00.0, 2018-02-17 23:59:59.999, 409000611074, 1.2706551E7]
-+I[2018-02-18 00:00:00.0, 2018-03-20 00:00:00.0, 2018-03-19 23:59:59.999, 409000611074, 1.5782355E7]
-```
+   $ docker-compose exec taskmanager cat /tmp/output/2021-08-31--04/.part-0-0.inprogress.47949645-ba93-40c7-a18e-d88ba1845cf2
+   +I[2017-12-20 00:00:00.0, 2018-01-19 00:00:00.0, 2018-01-18 23:59:59.999, 409000611074, 1.3515737E7]
+   +I[2018-01-19 00:00:00.0, 2018-02-18 00:00:00.0, 2018-02-17 23:59:59.999, 409000611074, 1.2706551E7]
+   +I[2018-02-18 00:00:00.0, 2018-03-20 00:00:00.0, 2018-03-19 23:59:59.999, 409000611074, 1.5782355E7]
+   ```
 
 2. Example [`bank_stream_sql.py`](./app/bank_stream_sql.py) does the same thing as [`bank_stream_table_api.py`](./app/bank_stream_table_api.py) but with SQL using Table API's `execute_sql`. To run the example:
 
-```bash
-docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_sql.py
-```
+   ```bash
+   docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_sql.py
+   ```
 
-In this example, since we are using `.print()`, the output should look something like the below.
+   In this example, since we are using `.print()`, the output should look something like the below.
 
-```bash
-$ docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_sql.py
-Job has been submitted with JobID 3cdb1ad83553e88d788666f4f0dce83c
-+----+-------------------------+-------------------------+--------------------------------+--------------------------------+
-| op |            window_start |              window_end |                     account_no |                          total |
-+----+-------------------------+-------------------------+--------------------------------+--------------------------------+
-| +I | 2017-12-20 00:00:00.000 | 2018-01-19 00:00:00.000 |                   409000611074 |                    1.3515737E7 |
-| +I | 2018-01-19 00:00:00.000 | 2018-02-18 00:00:00.000 |                   409000611074 |                    1.2706551E7 |
-| +I | 2018-02-18 00:00:00.000 | 2018-03-20 00:00:00.000 |                   409000611074 |                    1.5782355E7 |
-| +I | 2018-03-20 00:00:00.000 | 2018-04-19 00:00:00.000 |                   409000611074 |                    1.3791593E7 |
-+----+-------------------------+-------------------------+--------------------------------+--------------------------------+
-18 rows in set
-```
+   ```bash
+   $ docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_sql.py
+   Job has been submitted with JobID 3cdb1ad83553e88d788666f4f0dce83c
+   +----+-------------------------+-------------------------+--------------------------------+--------------------------------+
+   | op |            window_start |              window_end |                     account_no |                          total |
+   +----+-------------------------+-------------------------+--------------------------------+--------------------------------+
+   | +I | 2017-12-20 00:00:00.000 | 2018-01-19 00:00:00.000 |                   409000611074 |                    1.3515737E7 |
+   | +I | 2018-01-19 00:00:00.000 | 2018-02-18 00:00:00.000 |                   409000611074 |                    1.2706551E7 |
+   | +I | 2018-02-18 00:00:00.000 | 2018-03-20 00:00:00.000 |                   409000611074 |                    1.5782355E7 |
+   | +I | 2018-03-20 00:00:00.000 | 2018-04-19 00:00:00.000 |                   409000611074 |                    1.3791593E7 |
+   +----+-------------------------+-------------------------+--------------------------------+--------------------------------+
+   18 rows in set
+   ```
 
 3. To perform the same operation as the 2 examples above with SQL, we can bash into `jobmanager` with
 
-```bash
-docker exec -it jobmanager /bin/bash
-```
+   ```bash
+   docker exec -it jobmanager /bin/bash
+   ```
 
-and then spin up the SQL client that is shipped with Flink.
+   and then spin up the SQL client that is shipped with Flink.
 
-```bash
-./bin/sql-client.sh
-```
+   ```bash
+   ./bin/sql-client.sh
+   ```
 
-Refer to [`bank_stream_queries.sql`](./app/bank_stream_queries.sql) for the queries to run. The result should look like the below.
+   Refer to [`bank_stream_queries.sql`](./app/bank_stream_queries.sql) for the queries to run. The result should look like the below.
 
-![SQL Client](./media/sql-client-result.png "sql_client_result")
+   ![SQL Client](./media/sql-client-result.png "sql_client_result")
 
 4. Example [`kafka_transaction_stream.py`](./app/kafka_transaction_stream.py) generates some dummy data, streams it into a Kafka topic and then uses Flink to read it as source, perform some operations and stream it back to another Kakfa topic as sink.
 
-```bash
-$ docker-compose exec jobmanager ./bin/flink run -py /opt/app/kafka_transaction_stream.py
-Job has been submitted with JobID a86fc9ca3025bf196829e561cbe1665d
-```
+   ```bash
+   $ docker-compose exec jobmanager ./bin/flink run -py /opt/app/kafka_transaction_stream.py
+   Job has been submitted with JobID a86fc9ca3025bf196829e561cbe1665d
+   ```
 
-As Flink indicates that job has been submitted, run the below to check the result:
+   As Flink indicates that job has been submitted, run the below to check the result:
 
-```bash
-docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic temp_result
-```
+   ```bash
+   docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic temp_result
+   ```
 
-![SQL Client](./media/kafka-stream-result.png "kafka-stream-result")
+   ![SQL Client](./media/kafka-stream-result.png "kafka-stream-result")
 
 ## Test
 

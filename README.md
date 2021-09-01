@@ -1,6 +1,6 @@
 # Dejavu
 
-Dejavu is a stack meant for [PyFlink](https://flink.apache.org/) quickstarts. It include Docker images to start a local development, together with automation scripts and some examples.
+Dejavu is a stack meant for [PyFlink](https://flink.apache.org/) quickstarts. It includes Docker images to start a local development, together with automation scripts and some examples.
 
 ## Project Structure
 
@@ -25,7 +25,7 @@ Before starting working on this project, the following pre-requisites are needed
 
 To start local development stack:
 
-- Build the docker image with `./docker/build.sh`
+- Build the docker images with `./docker/pyflink/build.sh` and `./docker/data_generator/build.sh`
 - Bring up the containers with `docker-compose up --remove-orphans -d`
 - (Optional) If you are using VS Code, the stack is also shipped with a `devcontainer.json` file so that you can attach VS Code to the `jobmanager` container with the mounted workspace to use it as a full-featured environment. [Read More](https://code.visualstudio.com/docs/remote/containers)
 
@@ -59,7 +59,7 @@ docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_sql.py
 
 In this example, since we are using `.print()`, the output should look something like the below.
 
-```
+```bash
 $ docker-compose exec jobmanager ./bin/flink run -py /opt/app/bank_stream_sql.py
 Job has been submitted with JobID 3cdb1ad83553e88d788666f4f0dce83c
 +----+-------------------------+-------------------------+--------------------------------+--------------------------------+
@@ -73,7 +73,7 @@ Job has been submitted with JobID 3cdb1ad83553e88d788666f4f0dce83c
 18 rows in set
 ```
 
-3. To perform the same operation with SQL, we can bash into `jobmanager` with
+3. To perform the same operation as the 2 examples above with SQL, we can bash into `jobmanager` with
 
 ```bash
 docker exec -it jobmanager /bin/bash
@@ -87,11 +87,26 @@ and then spin up the SQL client that is shipped with Flink.
 
 Refer to [`bank_stream_queries.sql`](./app/bank_stream_queries.sql) for the queries to run. The result should look like the below.
 
-![SQL Client](./media/sql-client-result.png "Title")
+![SQL Client](./media/sql-client-result.png "sql_client_result")
+
+4. Example [`kafka_transaction_stream.py`](./app/kafka_transaction_stream.py) generates some dummy data, streams it into a Kafka topic and then uses Flink to read it as source, perform some operations and stream it back to another Kakfa topic as sink.
+
+```bash
+$ docker-compose exec jobmanager ./bin/flink run -py /opt/app/kafka_transaction_stream.py
+Job has been submitted with JobID a86fc9ca3025bf196829e561cbe1665d
+```
+
+As Flink indicates that job has been submitted, run the below to check the result:
+
+```bash
+docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic temp_result
+```
+
+![SQL Client](./media/kafka-stream-result.png "kafka-stream-result")
 
 ## Test
 
-Test suites for this stack have not yet been developed (a PR is more than welcome 😄 ). The plan was to have PyFlink installed in a Python virtual env to run the tests locally on host. A `Makefile` has been scaffolded for this purpose.
+Test suites for this stack have not yet been developed (a PR is more than welcome 😄). The plan was to have PyFlink installed in a Python virtual env to run the tests locally on host. A `Makefile` has been scaffolded for this purpose.
 
 ## Deployment
 

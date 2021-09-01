@@ -6,7 +6,6 @@ from pyflink.table import (
     DataTypes,
     EnvironmentSettings,
 )
-from pyflink.table.descriptors import Schema, Rowtime, Json, Kafka, Elasticsearch
 from pyflink.table.window import Tumble
 
 s_env = StreamExecutionEnvironment.get_execution_environment()

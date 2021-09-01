@@ -1,0 +1,3 @@
+Faker==8.12.1
+pandas==1.1.5
+kafka-python==2.0.2

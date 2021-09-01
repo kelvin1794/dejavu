@@ -47,3 +47,9 @@ services:
       KAFKA_CREATE_TOPICS: "transactions:1:1,temp_result:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  data_generator:
+    image: data_generator:latest
+    container_name: data_generator
+    depends_on:
+      - kafka
+      - jobmanager

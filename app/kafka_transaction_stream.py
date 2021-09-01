@@ -59,6 +59,23 @@ st_env.register_table_sink(
     ),
 )
 
+st_env.execute_sql(
+    """
+    CREATE TABLE transaction_sink (
+        window_end TIMESTAMP(3),
+        account_number STRING,
+        total_amount DOUBLE
+    ) WITH (
+        'connector'='kafka',
+        'topic'='temp_result',
+        'properties.zookeeper.connect' = 'zookeeper:2181',  
+        'properties.bootstrap.servers' = 'kafka:9092',
+        'format'='json',
+        'scan.startup.mode' = 'latest-offset'
+    )
+    """
+)
+
 # fmt: off
 st_env.from_path("transaction_source") \
     .window(Tumble.over("20.seconds").on("transaction_datetime").alias("w")) \
@@ -69,8 +86,7 @@ st_env.from_path("transaction_source") \
         account_number,
         SUM(amount) AS total_amount
         """) \
-    .insert_into("sink_into_csv")
+    .insert_into("transaction_sink")
 # fmt: on
-
 
 st_env.execute("app")
